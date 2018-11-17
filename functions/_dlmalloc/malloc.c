@@ -18,7 +18,7 @@ void * sbrk( intptr_t );
 
 #ifndef REGTEST
 
-#include "_PDCLIB_config.h"
+#include <pdclib/_PDCLIB_config.h>
 
 /* Have all functions herein use the dl* prefix */
 #define USE_DL_PREFIX 1
@@ -589,6 +589,25 @@ MAX_RELEASE_CHECK_RATE   default: 4095 unless not HAVE_MMAP
 #define DLMALLOC_EXPORT extern
 #endif
 
+#ifdef NXDK
+#undef _WIN32
+#undef WIN32
+#undef _MSC_VER
+#define HAVE_MORECORE 0
+#define HAVE_MMAP 1
+#define USE_SPIN_LOCKS 1
+#define LACKS_FCNTL_H
+#define LACKS_SYS_TYPES_H
+#define LACKS_SYS_MMAN_H
+#define LACKS_SCHED_H
+#define LACKS_SYS_PARAM_H
+#include <threads.h>
+#include <memoryapi.h>
+#include <xboxkrnl/xboxkrnl.h>
+#define interlockedexchange(a, b) InterlockedExchange((PLONG)a, b)
+#define interlockedcompareexchange InterlockedCompareExchange
+#endif
+
 #ifndef WIN32
 #ifdef _WIN32
 #define WIN32 1
@@ -659,7 +678,7 @@ MAX_RELEASE_CHECK_RATE   default: 4095 unless not HAVE_MMAP
 #if ((defined(__GNUC__) &&                                              \
       ((__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1)) ||      \
        defined(__i386__) || defined(__x86_64__))) ||                    \
-     (defined(_MSC_VER) && _MSC_VER>=1310))
+     (defined(_MSC_VER) && _MSC_VER>=1310)) || defined(NXDK)
 #ifndef USE_SPIN_LOCKS
 #define USE_SPIN_LOCKS 1
 #endif /* USE_SPIN_LOCKS */
@@ -1701,7 +1720,7 @@ unsigned char _BitScanReverse(unsigned long *index, unsigned long mask);
 
 #if HAVE_MMAP
 
-#ifndef WIN32
+#if !defined(WIN32) && !defined(NXDK)
 #define MUNMAP_DEFAULT(a, s)  munmap((a), (s))
 #define MMAP_PROT            (PROT_READ|PROT_WRITE)
 #if !defined(MAP_ANONYMOUS) && defined(MAP_ANON)
@@ -1925,10 +1944,12 @@ static FORCEINLINE void x86_clear_lock(int* sl) {
 #endif /* ... gcc spins locks ... */
 
 /* How to yield for a spin lock */
-#define SPINS_PER_YIELD       63
+#define SPINS_PER_YIELD       1
 #if defined(_MSC_VER)
 #define SLEEP_EX_DURATION     50 /* delay for yield/sleep */
 #define SPIN_LOCK_YIELD  SleepEx(SLEEP_EX_DURATION, FALSE)
+#elif defined(NXDK)
+#define SPIN_LOCK_YIELD   thrd_yield();
 #elif defined (__SVR4) && defined (__sun) /* solaris */
 #define SPIN_LOCK_YIELD   thr_yield();
 #elif !defined(LACKS_SCHED_H)
