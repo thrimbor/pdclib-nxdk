@@ -4,11 +4,14 @@
 #include <pdclib/_PDCLIB_xbox_tls.h>
 #include <pdclib/_PDCLIB_xbox_tss.h>
 
+extern void _PDCLIB_xbox_run_crt_initializers();
 extern int main (int argc, char **argv);
 
 static int main_wrapper ()
 {
     _PDCLIB_xbox_tss_init();
+
+    _PDCLIB_xbox_run_crt_initializers();
 
     char *_argv = 0;
     return main(0, &_argv);
