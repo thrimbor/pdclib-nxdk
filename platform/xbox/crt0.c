@@ -1,5 +1,4 @@
 #include <xboxkrnl/xboxkrnl.h>
-#include <hal/video.h>
 #include <stdlib.h>
 #include <threads.h>
 #include <pdclib/_PDCLIB_xbox_tls.h>
@@ -49,8 +48,6 @@ static int main_wrapper ()
 
 void XboxCRTEntry ()
 {
-    XVideoSetMode(640, 480, 32, REFRESH_DEFAULT);
-
     DWORD tlssize;
     // Sum up the required amount of memory, round it up to a multiple of
     // 16 bytes and add 4 bytes for the self-reference
