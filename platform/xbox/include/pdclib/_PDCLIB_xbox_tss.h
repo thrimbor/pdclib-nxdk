@@ -1,6 +1,7 @@
 #ifndef _PDCLIB_TSS_H
 #define _PDCLIB_TSS_H _PDCLIB_TSS_H
 
+#include <stdint.h>
 #include <threads.h>
 
 #ifdef __cplusplus

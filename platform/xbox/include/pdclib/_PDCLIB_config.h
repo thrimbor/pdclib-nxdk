@@ -524,10 +524,24 @@ typedef unsigned int wint_t;
 #endif
 
 /* threads ------------------------------------------------------------------ */
+typedef struct __PDCLIB_thrd_t
+{
+    void *handle;
+    void *id;
+} _PDCLIB_thrd_t;
+typedef struct __PDCLIB_cnd_t
+{
+    void *eventHandles[2]; // [0] single-receiver signal, [1] broadcast signal
+    _Atomic int waitCount;
+} _PDCLIB_cnd_t;
 typedef struct __PDCLIB_mtx_t
 {
     void *handle;
 } _PDCLIB_mtx_t;
+typedef unsigned int _PDCLIB_tss_t;
+typedef int _PDCLIB_once_flag;
+#define _PDCLIB_ONCE_FLAG_INIT 0
+#define _PDCLIB_TSS_DTOR_ITERATIONS 4
 
 
 #endif
