@@ -6,15 +6,41 @@
 
 extern void _PDCLIB_xbox_run_crt_initializers();
 extern int main (int argc, char **argv);
+extern mtx_t _PDCLIB_filelist_mtx;
+extern struct _PDCLIB_file_t * stdin;
+extern struct _PDCLIB_file_t * stdout;
+extern struct _PDCLIB_file_t * stderr;
+
+void _PDCLIB_xbox_libc_init ()
+{
+    mtx_init(&_PDCLIB_filelist_mtx, mtx_plain);
+    mtx_init(&stdin->mtx, mtx_recursive);
+    mtx_init(&stdout->mtx, mtx_recursive);
+    mtx_init(&stderr->mtx, mtx_recursive);
+}
+
+void _PDCLIB_xbox_libc_deinit ()
+{
+    mtx_destroy(&_PDCLIB_filelist_mtx);
+    mtx_destroy(&stdin->mtx);
+    mtx_destroy(&stdout->mtx);
+    mtx_destroy(&stderr->mtx);
+}
 
 static int main_wrapper ()
 {
     _PDCLIB_xbox_tss_init();
 
+    _PDCLIB_xbox_libc_init();
+
     _PDCLIB_xbox_run_crt_initializers();
 
+    int retval;
     char *_argv = 0;
     retval = main(0, &_argv);
+
+    _PDCLIB_xbox_libc_deinit();
+
     exit(retval);
 
     return retval;
