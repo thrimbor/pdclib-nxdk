@@ -34,6 +34,12 @@
 #define _PDCLIB_NORETURN __attribute__(( noreturn ))
 
 /* -------------------------------------------------------------------------- */
+/* Symbol Visibility                                                          */
+/* -------------------------------------------------------------------------- */
+#define _PDCLIB_PUBLIC
+#define _PDCLIB_LOCAL
+
+/* -------------------------------------------------------------------------- */
 /* Integers                                                                   */
 /* -------------------------------------------------------------------------- */
 /* Assuming 8-bit char, two's-complement architecture here. 'short' being     */
@@ -516,6 +522,12 @@ typedef int _PDCLIB_fd_t;
 #ifdef __CYGWIN__
 typedef unsigned int wint_t;
 #endif
+
+/* threads ------------------------------------------------------------------ */
+typedef struct __PDCLIB_mtx_t
+{
+    void *handle;
+} _PDCLIB_mtx_t;
 
 
 #endif

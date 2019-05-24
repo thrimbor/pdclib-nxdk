@@ -54,7 +54,7 @@ void (*signal( int sig, void (*func)( int ) ) )( int )
             /* The standard calls for an unspecified "positive value". You
                will probably want to define a specific value for this.
             */
-            _PDCLIB_errno = 1;
+            *_PDCLIB_errno_func() = _PDCLIB_EINVAL;
             return SIG_ERR;
     }
     return oldhandler;

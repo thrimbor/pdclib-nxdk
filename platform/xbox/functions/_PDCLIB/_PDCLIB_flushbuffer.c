@@ -65,7 +65,7 @@ int _PDCLIB_flushbuffer( struct _PDCLIB_file_t * stream )
     /* Number of retries exceeded. You probably want a different errno value
        here.
     */
-    _PDCLIB_errno = _PDCLIB_EAGAIN;
+    *_PDCLIB_errno_func() = _PDCLIB_EAGAIN;
     stream->status |= _PDCLIB_ERRORFLAG;
     /* Move unwritten remains to begin of buffer. */
     stream->bufidx -= written;
