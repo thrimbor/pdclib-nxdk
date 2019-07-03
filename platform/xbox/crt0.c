@@ -1,5 +1,6 @@
 #include <xboxkrnl/xboxkrnl.h>
 #include <hal/video.h>
+#include <stdlib.h>
 #include <threads.h>
 #include <pdclib/_PDCLIB_xbox_tls.h>
 #include <pdclib/_PDCLIB_xbox_tss.h>
@@ -41,6 +42,8 @@ static int main_wrapper ()
 
     _PDCLIB_xbox_libc_deinit();
 
+    exit(retval);
+
     return retval;
 }
 
@@ -58,7 +61,5 @@ void XboxCRTEntry ()
 
     thrd_t main_thread;
     thrd_create(&main_thread, main_wrapper, NULL);
-    thrd_join(main_thread, NULL);
-
-    HalReturnToFirmware(HalQuickRebootRoutine);
+    thrd_detach(main_thread);
 }
