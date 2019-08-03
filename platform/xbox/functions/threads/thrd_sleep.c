@@ -16,16 +16,6 @@ int thrd_sleep (const struct timespec *duration, struct timespec *remaining)
     interval.QuadPart = -interval.QuadPart;
     status = KeDelayExecutionThread(UserMode, FALSE, &interval);
 
-    if (NT_SUCCESS(status))
-    {
-        if (remaining)
-        {
-            remaining->tv_sec = 0;
-            remaining->tv_nsec = 0;
-        }
-        return 0;
-    }
-
     // If we were interrupted, we may need to calculate the remaining time
     if (status == STATUS_USER_APC)
     {
@@ -40,6 +30,16 @@ int thrd_sleep (const struct timespec *duration, struct timespec *remaining)
             remaining->tv_nsec = (timeUnitsRemaining % 10000000) * 100;
         }
         return -1;
+    }
+
+    if (NT_SUCCESS(status))
+    {
+        if (remaining)
+        {
+            remaining->tv_sec = 0;
+            remaining->tv_nsec = 0;
+        }
+        return 0;
     }
 
     return -2;
