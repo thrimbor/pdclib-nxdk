@@ -3,18 +3,51 @@
 
 double fmax(double x, double y)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    if (isnan(x)) {
+        return y;
+    }
+
+    if (isnan(y)) {
+        return x;
+    }
+
+    if (signbit(x) != signbit(y)) {
+        return signbit(x) ? y : x;
+    }
+
+    return x < y ? y : x;
 }
 
 float fmaxf(float x, float y)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    if (isnan(x)) {
+        return y;
+    }
+
+    if (isnan(y)) {
+        return x;
+    }
+
+    if (signbit(x) != signbit(y)) {
+        return signbit(x) ? y : x;
+    }
+
+    return x < y ? y : x;
 }
 
 long double fmaxl(long double x, long double y)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    if (isnan(x)) {
+        return y;
+    }
+
+    if (isnan(y)) {
+        return x;
+    }
+
+    if (signbit(x) != signbit(y)) {
+        return signbit(x) ? y : x;
+    }
+
+    return x < y ? y : x;
 }

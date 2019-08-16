@@ -16,11 +16,12 @@ typedef double double_t;
 
 #define NAN (__builtin_nanf(""))
 
-#define FP_INFINITE 0x01
-#define FP_NAN 0x02
-#define FP_NORMAL 0x04
-#define FP_SUBNORMAL 0x08
-#define FP_ZERO 0x10
+// immitate ReactOS's trick of modeling these after FPU status word flags
+#define FP_NAN 0x0100
+#define FP_NORMAL 0x0400
+#define FP_INFINITE (FP_NAN | FP_NORMAL)
+#define FP_ZERO 0x4000
+#define FP_SUBNORMAL (FP_NORMAL | FP_ZERO)
 
 #define FP_FAST_FMAF 1
 #define FP_FAST_FMA 1
@@ -51,11 +52,69 @@ typedef double double_t;
     #define M_SQRT1_2 0.70710678118654752440
 #endif
 
-#define fpclassify(x) (__builtin_fpclassify(FP_NAN, FP_INFINITE, FP_NORMAL, FP_SUBNORMAL, FP_ZERO, x))
-#define isinf(x) (__builtin_isinf_sign(x))
-#define isnan(x) (__builtin_isnan(x))
-#define isnormal(x) (__builtin_isnormal(x))
-#define signbit(x) (__builtin_signbit(x))
+static inline int __fp_unordered_compare (long double x, long double y)
+{
+    unsigned short sw;
+    __asm__ ("fucom;"  // compare st(0) with st(1)
+             "fnstsw;" // store status word in ax (sw variable)
+             : "=a"(sw) : "t"(x), "u"(y));
+    return sw;
+}
+
+int __fpclassifyf (float x);
+int __fpclassify (double x);
+int __fpclassifyl (long double x);
+int __signbitf (float x);
+int __signbit (double x);
+int __signbitl (long double x);
+
+#ifndef __cplusplus
+    #define fpclassify(x) (sizeof(x) == sizeof(float) ? __fpclassifyf(x) : sizeof(x) == sizeof(double) ? __fpclassify(x) : __fpclassifyl(x))
+    #define isfinite(x) ((fpclassify(x) & FP_NAN) == 0)
+    #define isinf(x) (fpclassify(x) == FP_INFINITE)
+    #define isnan(x) (fpclassify(x) == FP_NAN)
+    #define isnormal(x) (fpclassify(x) == FP_NORMAL)
+    #define signbit(x) (sizeof(x) == sizeof(float) ? __signbitf(x) : sizeof(x) == sizeof(double) ? __signbit(x) : __signbitl(x))
+
+    // 7.12.14
+    #define isgreater(x, y) ((__fp_unordered_compare((x), (y)) & 0x4500) == 0)
+    #define isgreaterequal(x, y) ((__fp_unordered_compare((x), (y)) & FP_INFINITE) == 0)
+    #define isless(x, y) ((__fp_unordered_compare((y), (x)) & 0x4500) == 0)
+    #define islessequal(x, y) ((__fp_unordered_compare((y), (x)) & FP_INFINITE) == 0)
+    #define islessgreater(x, y) ((__fp_unordered_compare((x), (y)) & FP_SUBNORMAL) == 0)
+    #define isunordered(x, y) ((__fp_unordered_compare((x), (y)) & 0x4500) == 0x4500)
+#else
+    extern "C++"
+    {
+        inline int fpclassify (float x) { return __fpclassifyf(x); };
+        inline int fpclassify (double x) { return __fpclassify(x); };
+        inline int fpclassify (long double x) { return __fpclassifyl(x); };
+        template <typename T>
+        inline int isfinite (T x) { return #define isfinite(x) ((fpclassify(x) & FP_NAN) == 0); };
+        template <typename T>
+        inline int isinf (T x) { return (fpclassify(x) == FP_INFINITE); };
+        template <typename T>
+        inline int isnan (T x) { return (fpclassify(x) == FP_NAN); };
+        template <typename T>
+        inline int isnormal (T x) { return (fpclassify(x) == FP_NORMAL); };
+        inline int signbit (float x) { return __signbitf(x); };
+        inline int signbit (double x) { return __signbit(x); };
+        inline int signbit (long double x) { return __signbitl(x); };
+
+        template <typename T1, typename T2>
+        inline int isgreater (T1 x, T2 y) { return ((__fp_unordered_compare((x), (y)) & 0x4500) == 0); };
+        template <typename T1, typename T2>
+        inline int isgreaterequal (T1 x, T2 y) { return ((__fp_unordered_compare((x), (y)) & FP_INFINITE) == 0); };
+        template <typename T1, typename T2>
+        inline int isless (T1 x, T2 y) { return ((__fp_unordered_compare((y), (x)) & 0x4500) == 0); };
+        template <typename T1, typename T2>
+        inline int islessequal (T1 x, T2 y) { return ((__fp_unordered_compare((y), (x)) & FP_INFINITE) == 0); };
+        template <typename T1, typename T2>
+        inline int islessgreater (T1 x, T2 y) { return ((__fp_unordered_compare((x), (y)) & FP_SUBNORMAL) == 0); };
+        template <typename T1, typename T2>
+        inline int isunordered (T1 x, T2 y) { return ((__fp_unordered_compare((x), (y)) & 0x4500) == 0x4500); };
+    }
+#endif
 
 // 7.12.4
 double acos(double x);
@@ -210,6 +269,10 @@ double ceil(double x);
 float ceilf(float x);
 long double ceill(long double x);
 
+double floor(double x);
+float floorf(float x);
+long double floorl(long double x);
+
 double nearbyint(double x);
 float nearbyintf(float x);
 long double nearbyintl(long double x);
@@ -287,14 +350,6 @@ long double fminl(long double x, long double y);
 double fma(double x, double y, double z);
 float fmaf(float x, float y, float z);
 long double fmal(long double x, long double y, long double z);
-
-// 7.12.14
-#define isgreater(x, y) __builtin_isgreater((x), (y))
-#define isgreaterequal(x, y) __builtin_isgreaterequal((x), (y))
-#define isless(x, y) __builtin_isless((x), (y))
-#define islessequal(x, y) __builtin_islessequal((x), (y))
-#define islessgreater(x, y) __builtin_islessgreater((x), (y))
-#define isunordered(x, y) __builtin_isunordered((x), (y))
 
 #ifdef __cplusplus
 }
