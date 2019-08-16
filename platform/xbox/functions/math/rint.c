@@ -3,18 +3,21 @@
 
 double rint(double x)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    __asm__ ("frndint;"
+             : "=t"(x) : "0"(x));
+    return x;
 }
 
 float rintf(float x)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    __asm__ ("frndint;"
+             : "=t"(x) : "0"(x));
+    return x;
 }
 
 long double rintl(long double x)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    __asm__ ("frndint;"
+             : "=t"(x) : "0"(x));
+    return x;
 }
