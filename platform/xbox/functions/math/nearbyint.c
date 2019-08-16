@@ -1,20 +1,37 @@
 #include <math.h>
-#include <assert.h>
+#include <fenv.h>
+
+#pragma STDC FENV_ACCESS ON
 
 double nearbyint(double x)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    int inexact_set;
+
+    inexact_set = fetestexcept(FE_INEXACT);
+    x = rint(x);
+    if (!inexact_set) feclearexcept(FE_INEXACT);
+
+    return x;
 }
 
 float nearbyintf(float x)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    int inexact_set;
+
+    inexact_set = fetestexcept(FE_INEXACT);
+    x = rintf(x);
+    if (!inexact_set) feclearexcept(FE_INEXACT);
+
+    return x;
 }
 
 long double nearbyintl(long double x)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    int inexact_set;
+
+    inexact_set = fetestexcept(FE_INEXACT);
+    x = rintl(x);
+    if (!inexact_set) feclearexcept(FE_INEXACT);
+
+    return x;
 }
