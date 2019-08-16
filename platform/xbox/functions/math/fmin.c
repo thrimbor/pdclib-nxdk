@@ -3,18 +3,51 @@
 
 double fmin(double x, double y)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    if (isnan(x)) {
+        return y;
+    }
+
+    if (isnan(y)) {
+        return x;
+    }
+
+    if (signbit(x) != signbit(y)) {
+        return signbit(x) ? x : y;
+    }
+
+    return x < y ? x : y;
 }
 
 float fminf(float x, float y)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    if (isnan(x)) {
+        return y;
+    }
+
+    if (isnan(y)) {
+        return x;
+    }
+
+    if (signbit(x) != signbit(y)) {
+        return signbit(x) ? x : y;
+    }
+
+    return x < y ? x : y;
 }
 
 long double fminl(long double x, long double y)
 {
-    assert(0); // Not implemented
-    return 0.0;
+    if (isnan(x)) {
+        return y;
+    }
+
+    if (isnan(y)) {
+        return x;
+    }
+
+    if (signbit(x) != signbit(y)) {
+        return signbit(x) ? x : y;
+    }
+
+    return x < y ? x : y;
 }
