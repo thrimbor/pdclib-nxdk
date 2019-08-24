@@ -158,6 +158,21 @@ _PDCLIB_PUBLIC int atexit( void (*func)( void ) );
 */
 _PDCLIB_PUBLIC void exit( int status );
 
+/* Register a function that will be called on quick_exit().
+   At least 32 functions can be registered this way, and will be called in
+   reverse order of registration (last-in, first-out).
+   Returns zero if registration is successfull, nonzero if it failed.
+*/
+_PDCLIB_PUBLIC int at_quick_exit( void (*func)( void ) );
+
+/* Quick process termination. Functions registered by at_quick_exit() (see
+   above) are called, streams flushed, files closed and temporary files removed
+   before the program is terminated with the given status. (See comment for
+   EXIT_SUCCESS and EXIT_FAILURE above.)
+   quick_exit() does not return.
+*/
+_PDCLIB_PUBLIC void quick_exit( int status );
+
 /* Normal process termination. Functions registered by atexit() (see above) are
    NOT CALLED. This implementation DOES flush streams, close files and removes
    temporary files before the program is teminated with the given status. (See
