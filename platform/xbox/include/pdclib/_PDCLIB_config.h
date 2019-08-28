@@ -137,8 +137,8 @@ struct _PDCLIB_lldiv_t
 /* -------------------------------------------------------------------------- */
 
 /* The result type of substracting two pointers */
-#define _PDCLIB_ptrdiff long
-#define _PDCLIB_PTRDIFF LONG
+#define _PDCLIB_ptrdiff int
+#define _PDCLIB_PTRDIFF INT
 #define _PDCLIB_PTR_CONV l
 
 /* An integer type that can be accessed as atomic entity (think asynchronous
