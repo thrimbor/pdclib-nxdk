@@ -554,5 +554,89 @@ typedef int _PDCLIB_once_flag;
 #define _PDCLIB_ONCE_FLAG_INIT 0
 #define _PDCLIB_TSS_DTOR_ITERATIONS 4
 
+#if __has_include(<assert_ext_.h>)
+#define _PDCLIB_EXTEND_ASSERT_H <assert_ext_.h>
+#endif
+
+#if __has_include(<ctype_ext_.h>)
+#define _PDCLIB_EXTEND_CTYPE_H <ctype_ext_.h>
+#endif
+
+#if __has_include(<errno_ext_.h>)
+#define _PDCLIB_EXTEND_ERRNO_H <errno_ext_.h>
+#endif
+
+#if __has_include(<float_ext_.h>)
+#define _PDCLIB_EXTEND_FLOAT_H <float_ext_.h>
+#endif
+
+#if __has_include(<inttypes_ext_.h>)
+#define _PDCLIB_EXTEND_INTTYPES_H <inttypes_ext_.h>
+#endif
+
+#if __has_include(<iso646_ext_.h>)
+#define _PDCLIB_EXTEND_ISO646_H <iso646_ext_.h>
+#endif
+
+#if __has_include(<limits_ext_.h>)
+#define _PDCLIB_EXTEND_LIMITS_H <limits_ext_.h>
+#endif
+
+#if __has_include(<locale_ext_.h>)
+#define _PDCLIB_EXTEND_LOCALE_H <locale_ext_.h>
+#endif
+
+#if __has_include(<signal_ext_.h>)
+#define _PDCLIB_EXTEND_SIGNAL_H <signal_ext_.h>
+#endif
+
+#if __has_include(<stdalign_ext_.h>)
+#define _PDCLIB_EXTEND_STDALIGN_H <stdalign_ext_.h>
+#endif
+
+#if __has_include(<stdarg_ext_.h>)
+#define _PDCLIB_EXTEND_STDARG_H <stdarg_ext_.h>
+#endif
+
+#if __has_include(<stdbool_ext_.h>)
+#define _PDCLIB_EXTEND_STDBOOL_H <stdbool_ext_.h>
+#endif
+
+#if __has_include(<stddef_ext_.h>)
+#define _PDCLIB_EXTEND_STDDEF_H <stddef_ext_.h>
+#endif
+
+#if __has_include(<stdint_ext_.h>)
+#define _PDCLIB_EXTEND_STDINT_H <stdint_ext_.h>
+#endif
+
+#if __has_include(<stdio_ext_.h>)
+#define _PDCLIB_EXTEND_STDIO_H <stdio_ext_.h>
+#endif
+
+#if __has_include(<stdlib_ext_.h>)
+#define _PDCLIB_EXTEND_STDLIB_H <stdlib_ext_.h>
+#endif
+
+#if __has_include(<stdnoreturn_ext_.h>)
+#define _PDCLIB_EXTEND_STDNORETURN_H <stdnoreturn_ext_.h>
+#endif
+
+#if __has_include(<string_ext_.h>)
+#define _PDCLIB_EXTEND_STRING_H <string_ext_.h>
+#endif
+
+#if __has_include(<threads_ext_.h>)
+#define _PDCLIB_EXTEND_THREADS_H <threads_ext_.h>
+#endif
+
+#if __has_include(<time_ext_.h>)
+#define _PDCLIB_EXTEND_TIME_H <time_ext_.h>
+#endif
+
+#if __has_include(<wctype_ext_.h>)
+#define _PDCLIB_EXTEND_WCTYPE_H <wctype_ext_.h>
+#endif
+
 
 #endif
