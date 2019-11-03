@@ -15,8 +15,9 @@ extern "C" {
 
 typedef _PDCLIB_wint_t wint_t;
 
-// wctrans_t
-// wctype_t
+// Xbox-specific types to make this header work
+typedef int wctrans_t;
+typedef int wctype_t;
 
 #ifndef _PDCLIB_WEOF_DEFINED
 #define _PDCLIB_WEOF_DEFINED _PDCLIB_WEOF_DEFINED
