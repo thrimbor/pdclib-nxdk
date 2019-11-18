@@ -14,7 +14,10 @@
 
 #include "pdclib/_PDCLIB_glue.h"
 
-#include <hal/fileio.h>
+#include <errno.h>
+#include <windows.h>
+
+int _PDCLIB_w32errno( DWORD werror );
 
 /* The number of attempts to complete an output buffer flushing before giving
  *    up.
@@ -39,14 +42,13 @@ int _PDCLIB_flushbuffer( struct _PDCLIB_file_t * stream )
     */
     for ( retries = _PDCLIB_IO_RETRIES; retries > 0; --retries )
     {
-        unsigned int amount_written;
-        int status;
-        status = XWriteFile(stream->handle, stream->buffer + written, stream->bufidx - written, &amount_written);
+        DWORD amount_written;
+        BOOL status;
+        status = WriteFile(stream->handle, stream->buffer + written, stream->bufidx - written, &amount_written, NULL);
         if (!status)
         {
             /* Write error */
-            // FIXME: Translate returned errors to proper errno
-            //_PDCLIB_errno = _PDCLIB_ERROR;
+            *_PDCLIB_errno_func() = _PDCLIB_w32errno(GetLastError());
             stream->status |= _PDCLIB_ERRORFLAG;
             /* Move unwritten remains to begin of buffer. */
             stream->bufidx -= written;

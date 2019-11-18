@@ -13,11 +13,13 @@
 
 #include "pdclib/_PDCLIB_glue.h"
 
-#include <hal/fileio.h>
+#include <errno.h>
+#include <windows.h>
+
+int _PDCLIB_w32errno( DWORD werror );
 
 _PDCLIB_int64_t _PDCLIB_seek( struct _PDCLIB_file_t * stream, _PDCLIB_int64_t offset, int whence )
 {
-    // nxdk is limited to 32 bit file pointers at the moment
     int method;
     switch ( whence )
     {
@@ -25,24 +27,23 @@ _PDCLIB_int64_t _PDCLIB_seek( struct _PDCLIB_file_t * stream, _PDCLIB_int64_t of
         case SEEK_CUR: method = FILE_CURRENT; break;
         case SEEK_END: method = FILE_END; break;
         default:
-            // FIXME: Translate returned errors to proper errno
-            //_PDCLIB_errno = _PDCLIB_ERROR;
+            *_PDCLIB_errno_func() = EINVAL;
             return EOF;
     }
 
-    int new_pos = 0;
-    if (XSetFilePointer(stream->handle, offset, &new_pos, method))
+    LARGE_INTEGER new_pos;
+    new_pos.QuadPart = offset;
+    if ( SetFilePointerEx( stream->handle, new_pos, &new_pos, method) )
     {
         stream->ungetidx = 0;
         stream->bufidx = 0;
         stream->bufend = 0;
-        stream->pos.offset = new_pos;
-        return new_pos;
+        stream->pos.offset = new_pos.QuadPart;
+        return new_pos.QuadPart;
     }
     else
     {
-        // FIXME: Translate returned errors to proper errno
-        //_PDCLIB_errno = _PDCLIB_ERROR;
+        *_PDCLIB_errno_func() = _PDCLIB_w32errno(GetLastError());
         return EOF;
     }
 }

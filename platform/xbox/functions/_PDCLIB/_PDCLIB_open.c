@@ -13,9 +13,12 @@
 
 #include "pdclib/_PDCLIB_glue.h"
 
-#include <hal/fileio.h>
+#include <errno.h>
+#include <windows.h>
 
-int _PDCLIB_open( const char * const filename, unsigned int mode )
+int _PDCLIB_w32errno( DWORD werror );
+
+_PDCLIB_fd_t _PDCLIB_open( const char * const filename, unsigned int mode )
 {
     int access_flags = 0;
     int create_flags = 0;
@@ -47,28 +50,34 @@ int _PDCLIB_open( const char * const filename, unsigned int mode )
             create_flags = OPEN_ALWAYS;
             break;
         default: /* Invalid mode */
-            return -1;
+            return INVALID_HANDLE_VALUE;
     }
 
     int status;
-    int handle;
+    HANDLE handle;
 
-    status = XCreateFile(&handle, filename, access_flags, FILE_SHARE_READ | FILE_SHARE_WRITE, create_flags, FILE_FLAG_RANDOM_ACCESS);
+    handle = CreateFileA(filename, access_flags, FILE_SHARE_READ | FILE_SHARE_DELETE, NULL, create_flags, FILE_ATTRIBUTE_NORMAL, NULL);
 
-    if (status == STATUS_SUCCESS || status == ERROR_ALREADY_EXISTS)
+    if (handle != INVALID_HANDLE_VALUE)
     {
         if (mode & _PDCLIB_FAPPEND)
         {
-            int new_pos = 0;
-            XSetFilePointer(handle, 0, &new_pos, FILE_END);
+            LARGE_INTEGER new_pos;
+            new_pos.QuadPart = 0;
+            BOOL ok = SetFilePointerEx(handle, new_pos, &new_pos, FILE_END);
+            if (!ok)
+            {
+                *_PDCLIB_errno_func() = _PDCLIB_w32errno(GetLastError());
+                CloseHandle(handle);
+                return INVALID_HANDLE_VALUE;
+            }
         }
         return handle;
     }
     else
     {
-        // FIXME: Translate returned errors to proper errno
-        //_PDCLIB_errno = _PDCLIB_ERROR;
-        return -1;
+        *_PDCLIB_errno_func() = _PDCLIB_w32errno(GetLastError());
+        return INVALID_HANDLE_VALUE;
     }
 }
 
