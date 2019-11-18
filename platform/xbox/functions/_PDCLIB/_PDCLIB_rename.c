@@ -13,18 +13,20 @@
 
 #include "pdclib/_PDCLIB_glue.h"
 
-#include <hal/fileio.h>
+#include <errno.h>
+#include <windows.h>
+
+int _PDCLIB_w32errno( DWORD werror );
 
 int _PDCLIB_rename( const char * old, const char * new )
 {
-    if (XRenameFile(old, new) == STATUS_SUCCESS)
+    if ( MoveFileA(old, new) )
     {
         return 0;
     }
     else
     {
-        // FIXME: Translate returned errors to proper errno
-        //_PDCLIB_errno = _PDCLIB_ERROR;
+        *_PDCLIB_errno_func() = _PDCLIB_w32errno(GetLastError());
         return -1;
     }
 }

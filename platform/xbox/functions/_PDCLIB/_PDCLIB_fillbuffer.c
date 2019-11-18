@@ -13,14 +13,17 @@
 
 #include "pdclib/_PDCLIB_glue.h"
 
-#include <hal/fileio.h>
+#include <errno.h>
+#include <windows.h>
+
+int _PDCLIB_w32errno( DWORD werror );
 
 int _PDCLIB_fillbuffer( struct _PDCLIB_file_t * stream )
 {
     /* No need to handle buffers > INT_MAX, as PDCLib doesn't allow them */
-    int status;
-    unsigned int amount_read;
-    status = XReadFile(stream->handle, stream->buffer, stream->bufsize, &amount_read);
+    BOOL status;
+    DWORD amount_read;
+    status = ReadFile(stream->handle, stream->buffer, stream->bufsize, &amount_read, NULL);
     if (status)
     {
         if (amount_read == 0)
@@ -42,8 +45,7 @@ int _PDCLIB_fillbuffer( struct _PDCLIB_file_t * stream )
     }
     else
     {
-        // FIXME: Translate returned errors to proper errno
-        //_PDCLIB_errno = _PDCLIB_ERROR;
+        *_PDCLIB_errno_func() = _PDCLIB_w32errno(GetLastError());
         stream->status |= _PDCLIB_ERRORFLAG;
         return EOF;
     }
