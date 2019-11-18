@@ -11,9 +11,12 @@
 
 #ifndef REGTEST
 
+#include <errno.h>
 #include <string.h>
 
-#include <hal/fileio.h>
+#include <windows.h>
+
+int _PDCLIB_w32errno( DWORD werror );
 
 extern struct _PDCLIB_file_t * _PDCLIB_filelist;
 
@@ -31,14 +34,13 @@ int remove( const char * pathname )
         current = current->next;
     }
 
-    if ( XDeleteFile( pathname ) == STATUS_SUCCESS )
+    if ( DeleteFileA( pathname ) )
     {
         return 0;
     }
     else
     {
-        // FIXME: Translate returned errors to proper errno
-        //_PDCLIB_errno = _PDCLIB_ERROR;
+        *_PDCLIB_errno_func() = _PDCLIB_w32errno(GetLastError());
         return -1;
     }
 }
