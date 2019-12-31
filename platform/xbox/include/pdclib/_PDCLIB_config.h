@@ -355,35 +355,35 @@ typedef int _PDCLIB_fd_t;
 /* Permission denied */
 #define _PDCLIB_EACCES           13
 /* Address in use */
-#define _PDCLIB_EADDRINUSE       98
+#define _PDCLIB_EADDRINUSE      100
 /* Address not available */
-#define _PDCLIB_EADDRNOTAVAIL    99
+#define _PDCLIB_EADDRNOTAVAIL   101
 /* Address family not supported */
-#define _PDCLIB_EAFNOSUPPORT     97
+#define _PDCLIB_EAFNOSUPPORT    102
 /* Resource unavailable, try again */
 #define _PDCLIB_EAGAIN           11
 /* Connection already in progress */
-#define _PDCLIB_EALREADY        114
+#define _PDCLIB_EALREADY        103
 /* Bad file descriptor */
 #define _PDCLIB_EBADF             9
 /* Bad message */
-#define _PDCLIB_EBADMSG          74
+#define _PDCLIB_EBADMSG         104
 /* Device or resource busy */
 #define _PDCLIB_EBUSY            16
 /* Operation canceled */
-#define _PDCLIB_ECANCELED       125
+#define _PDCLIB_ECANCELED       105
 /* No child processes */
 #define _PDCLIB_ECHILD           10
 /* Connection aborted */
-#define _PDCLIB_ECONNABORTED    103
+#define _PDCLIB_ECONNABORTED    106
 /* Connection refused */
-#define _PDCLIB_ECONNREFUSED    111
+#define _PDCLIB_ECONNREFUSED    107
 /* Connection reset */
-#define _PDCLIB_ECONNRESET      104
+#define _PDCLIB_ECONNRESET      108
 /* Resource deadlock would occur */
-#define _PDCLIB_EDEADLK          35
+#define _PDCLIB_EDEADLK          36
 /* Destination address required */
-#define _PDCLIB_EDESTADDRREQ     89
+#define _PDCLIB_EDESTADDRREQ    109
 /* Mathematics argument out of domain of function */
 #define _PDCLIB_EDOM             33
 /* File exists */
@@ -393,13 +393,13 @@ typedef int _PDCLIB_fd_t;
 /* File too large */
 #define _PDCLIB_EFBIG            27
 /* Host is unreachable */
-#define _PDCLIB_EHOSTUNREACH    113
+#define _PDCLIB_EHOSTUNREACH    110
 /* Identifier removed */
-#define _PDCLIB_EIDRM            43
+#define _PDCLIB_EIDRM           111
 /* Illegal byte sequence */
-#define _PDCLIB_EILSEQ           84
+#define _PDCLIB_EILSEQ           42
 /* Operation in progress */
-#define _PDCLIB_EINPROGRESS     115
+#define _PDCLIB_EINPROGRESS     112
 /* Interrupted function */
 #define _PDCLIB_EINTR             4
 /* Invalid argument */
@@ -407,31 +407,31 @@ typedef int _PDCLIB_fd_t;
 /* I/O error */
 #define _PDCLIB_EIO               5
 /* Socket is connected */
-#define _PDCLIB_EISCONN         106
+#define _PDCLIB_EISCONN         113
 /* Is a directory */
 #define _PDCLIB_EISDIR           21
 /* Too many levels of symbolic links */
-#define _PDCLIB_ELOOP            40
+#define _PDCLIB_ELOOP           114
 /* File descriptor value too large */
 #define _PDCLIB_EMFILE           24
 /* Too many links */
 #define _PDCLIB_EMLINK           31
 /* Message too large */
-#define _PDCLIB_EMSGSIZE         90
+#define _PDCLIB_EMSGSIZE        115
 /* Filename too long */
-#define _PDCLIB_ENAMETOOLONG     36
+#define _PDCLIB_ENAMETOOLONG     38
 /* Network is down */
-#define _PDCLIB_ENETDOWN        100
+#define _PDCLIB_ENETDOWN        116
 /* Connection aborted by network */
-#define _PDCLIB_ENETRESET       102
+#define _PDCLIB_ENETRESET       117
 /* Network unreachable */
-#define _PDCLIB_ENETUNREACH     101
+#define _PDCLIB_ENETUNREACH     118
 /* Too many files open in system */
 #define _PDCLIB_ENFILE           23
 /* No buffer space available */
-#define _PDCLIB_ENOBUFS         105
+#define _PDCLIB_ENOBUFS         119
 /* No message is available on the STREAM head read queue */
-#define _PDCLIB_ENODATA          61
+#define _PDCLIB_ENODATA         120
 /* No such device */
 #define _PDCLIB_ENODEV           19
 /* No such file or directory */
@@ -439,55 +439,55 @@ typedef int _PDCLIB_fd_t;
 /* Executable file format error */
 #define _PDCLIB_ENOEXEC           8
 /* No locks available */
-#define _PDCLIB_ENOLCK           37
+#define _PDCLIB_ENOLCK           39
 /* Link has been severed */
-#define _PDCLIB_ENOLINK          67
+#define _PDCLIB_ENOLINK         121
 /* Not enough space */
 #define _PDCLIB_ENOMEM           12
 /* No message of the desired type */
-#define _PDCLIB_ENOMSG           42
+#define _PDCLIB_ENOMSG          122
 /* Protocol not available */
-#define _PDCLIB_ENOPROTOOPT      92
+#define _PDCLIB_ENOPROTOOPT     123
 /* No space left on device */
 #define _PDCLIB_ENOSPC           28
 /* No STREAM resources */
-#define _PDCLIB_ENOSR            63
+#define _PDCLIB_ENOSR           124
 /* Not a STREAM */
-#define _PDCLIB_ENOSTR           60
+#define _PDCLIB_ENOSTR          125
 /* Function not supported */
-#define _PDCLIB_ENOSYS           38
+#define _PDCLIB_ENOSYS           40
 /* The socket is not connected */
-#define _PDCLIB_ENOTCONN        107
+#define _PDCLIB_ENOTCONN        126
 /* Not a directory */
 #define _PDCLIB_ENOTDIR          20
 /* Directory not empty */
-#define _PDCLIB_ENOTEMPTY        39
+#define _PDCLIB_ENOTEMPTY        41
 /* State not recoverable */
-#define _PDCLIB_ENOTRECOVERABLE 131
+#define _PDCLIB_ENOTRECOVERABLE 127
 /* Not a socket */
-#define _PDCLIB_ENOTSOCK         88
+#define _PDCLIB_ENOTSOCK        128
 /* Not supported */
-#define _PDCLIB_ENOTSUP          95
+#define _PDCLIB_ENOTSUP         129
 /* Inappropriate I/O control operation */
 #define _PDCLIB_ENOTTY           25
 /* No such device or address */
 #define _PDCLIB_ENXIO             6
 /* Operation not supported on socket */
-#define _PDCLIB_EOPNOTSUPP       95
+#define _PDCLIB_EOPNOTSUPP      130
 /* Value too large to be stored in data type */
-#define _PDCLIB_EOVERFLOW        75
+#define _PDCLIB_EOVERFLOW       132
 /* Previous owner died */
-#define _PDCLIB_EOWNERDEAD      130
+#define _PDCLIB_EOWNERDEAD      133
 /* Operation not permitted */
 #define _PDCLIB_EPERM             1
 /* Broken pipe */
 #define _PDCLIB_EPIPE            32
 /* Protocol error */
-#define _PDCLIB_EPROTO           71
+#define _PDCLIB_EPROTO          134
 /* Protocol not supported */
-#define _PDCLIB_EPROTONOSUPPORT  93
+#define _PDCLIB_EPROTONOSUPPORT 135
 /* Protocol wrong type for socket */
-#define _PDCLIB_EPROTOTYPE       91
+#define _PDCLIB_EPROTOTYPE      136
 /* Result too large */
 #define _PDCLIB_ERANGE           34
 /* Read-only file system */
@@ -497,13 +497,13 @@ typedef int _PDCLIB_fd_t;
 /* No such process */
 #define _PDCLIB_ESRCH             3
 /* Stream ioctl() timeout */
-#define _PDCLIB_ETIME            62
+#define _PDCLIB_ETIME           137
 /* Connection timed out */
-#define _PDCLIB_ETIMEDOUT       110
+#define _PDCLIB_ETIMEDOUT       138
 /* Text file busy */
-#define _PDCLIB_ETXTBSY          26
+#define _PDCLIB_ETXTBSY         139
 /* Operation would block */
-#define _PDCLIB_EWOULDBLOCK      11
+#define _PDCLIB_EWOULDBLOCK     140
 /* Cross-device link */
 #define _PDCLIB_EXDEV            18
 
@@ -512,8 +512,7 @@ typedef int _PDCLIB_fd_t;
 /* strerror() and perror() functions. (If you change this value because you   */
 /* are using additional errno values, you *HAVE* to provide appropriate error */
 /* messages for *ALL* locales.)                                               */
-/* Default is 4 (0, ERANGE, EDOM, EILSEQ).                                    */
-#define _PDCLIB_ERRNO_MAX 132
+#define _PDCLIB_ERRNO_MAX 141
 
 /* The error message used for unknown error codes (generated by errno_readout */
 /* for consistency between the 'holes' in the list of defined error messages  */
