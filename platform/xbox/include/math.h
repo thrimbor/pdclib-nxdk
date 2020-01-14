@@ -90,7 +90,7 @@ int __signbitl (long double x);
         inline int fpclassify (double x) { return __fpclassify(x); };
         inline int fpclassify (long double x) { return __fpclassifyl(x); };
         template <typename T>
-        inline int isfinite (T x) { return #define isfinite(x) ((fpclassify(x) & FP_NAN) == 0); };
+        inline int isfinite (T x) { return ((fpclassify(x) & FP_NAN) == 0); };
         template <typename T>
         inline int isinf (T x) { return (fpclassify(x) == FP_INFINITE); };
         template <typename T>
