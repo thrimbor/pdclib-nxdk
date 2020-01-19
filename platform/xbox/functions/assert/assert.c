@@ -12,8 +12,8 @@ void _xbox_assert(char const * const expression, char const * const file_name, c
     #else
         debugPrint("\nAssertion failed: '%s' in function '%s', file '%s', line %u\n", expression, function_name, file_name, line);
         __asm__ ("cli\n"
-                 ".l:\n"
+                 "1:\n"
                  "hlt\n"
-                 "jmp .l\n");
+                 "jmp 1b\n");
     #endif
 }
