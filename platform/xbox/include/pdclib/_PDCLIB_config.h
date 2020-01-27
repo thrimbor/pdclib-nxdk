@@ -8,6 +8,7 @@
 #ifndef _PDCLIB_CONFIG_H
 #define _PDCLIB_CONFIG_H _PDCLIB_CONFIG_H
 
+#include <winapi/windef.h>
 /* -------------------------------------------------------------------------- */
 /* Misc                                                                       */
 /* -------------------------------------------------------------------------- */
@@ -279,7 +280,7 @@ typedef __builtin_va_list _PDCLIB_va_list;
 /* I/O ---------------------------------------------------------------------- */
 
 /* The type of the file descriptor returned by _PDCLIB_open(). */
-typedef int _PDCLIB_fd_t;
+typedef HANDLE _PDCLIB_fd_t;
 
 /* The value (of type _PDCLIB_fd_t) returned by _PDCLIB_open() if the operation
    failed.

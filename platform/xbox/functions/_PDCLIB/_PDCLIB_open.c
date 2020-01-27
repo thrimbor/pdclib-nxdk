@@ -12,10 +12,12 @@
 #ifndef REGTEST
 
 #include "pdclib/_PDCLIB_glue.h"
+#include <pdclib/werrno.h>
 
-#include <hal/fileio.h>
+#include <winapi/fileapi.h>
+#include <xboxkrnl/xboxkrnl.h>
 
-int _PDCLIB_open( const char * const filename, unsigned int mode )
+_PDCLIB_fd_t _PDCLIB_open( const char * const filename, unsigned int mode )
 {
     int access_flags = 0;
     int create_flags = 0;
@@ -47,28 +49,26 @@ int _PDCLIB_open( const char * const filename, unsigned int mode )
             create_flags = OPEN_ALWAYS;
             break;
         default: /* Invalid mode */
-            return -1;
+            return INVALID_HANDLE_VALUE;
     }
 
     int status;
-    int handle;
+    HANDLE handle;
 
-    status = XCreateFile(&handle, filename, access_flags, FILE_SHARE_READ | FILE_SHARE_WRITE, create_flags, FILE_FLAG_RANDOM_ACCESS);
-
-    if (status == STATUS_SUCCESS || status == ERROR_ALREADY_EXISTS)
+    handle = CreateFileA(filename, access_flags, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, create_flags, FILE_FLAG_RANDOM_ACCESS, NULL);
+    if( handle != INVALID_HANDLE_VALUE )
     {
         if (mode & _PDCLIB_FAPPEND)
         {
-            int new_pos = 0;
-            XSetFilePointer(handle, 0, &new_pos, FILE_END);
+            DWORD new_pos = 0;
+            new_pos =  SetFilePointer(handle, 0, NULL, FILE_END);
         }
         return handle;
     }
     else
     {
-        // FIXME: Translate returned errors to proper errno
-        //_PDCLIB_errno = _PDCLIB_ERROR;
-        return -1;
+        *_PDCLIB_errno_func() = werror_to_errno(GetLastError(), _PDCLIB_ERRNO_MAX + 1);
+        return INVALID_HANDLE_VALUE;
     }
 }
 

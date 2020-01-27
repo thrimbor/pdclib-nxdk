@@ -12,8 +12,10 @@
 #ifndef REGTEST
 
 #include "pdclib/_PDCLIB_glue.h"
+#include "pdclib/_PDCLIB_config.h"
+#include <pdclib/werrno.h>
 
-#include <hal/fileio.h>
+#include <winapi/fileapi.h>
 
 _PDCLIB_int64_t _PDCLIB_seek( struct _PDCLIB_file_t * stream, _PDCLIB_int64_t offset, int whence )
 {
@@ -25,13 +27,13 @@ _PDCLIB_int64_t _PDCLIB_seek( struct _PDCLIB_file_t * stream, _PDCLIB_int64_t of
         case SEEK_CUR: method = FILE_CURRENT; break;
         case SEEK_END: method = FILE_END; break;
         default:
-            // FIXME: Translate returned errors to proper errno
-            //_PDCLIB_errno = _PDCLIB_ERROR;
+            *_PDCLIB_errno_func() = werror_to_errno(GetLastError(), _PDCLIB_ERRNO_MAX + 1);
             return EOF;
     }
 
-    int new_pos = 0;
-    if (XSetFilePointer(stream->handle, offset, &new_pos, method))
+    DWORD new_pos = 0;
+    new_pos =  SetFilePointer(stream->handle, offset, NULL, method);
+    if(new_pos != INVALID_SET_FILE_POINTER) //Success
     {
         stream->ungetidx = 0;
         stream->bufidx = 0;
@@ -41,8 +43,7 @@ _PDCLIB_int64_t _PDCLIB_seek( struct _PDCLIB_file_t * stream, _PDCLIB_int64_t of
     }
     else
     {
-        // FIXME: Translate returned errors to proper errno
-        //_PDCLIB_errno = _PDCLIB_ERROR;
+        *_PDCLIB_errno_func() = werror_to_errno(GetLastError(), _PDCLIB_ERRNO_MAX + 1);
         return EOF;
     }
 }

@@ -12,19 +12,19 @@
 #ifndef REGTEST
 
 #include "pdclib/_PDCLIB_glue.h"
+#include <pdclib/werrno.h>
 
-#include <hal/fileio.h>
+#include <winapi/fileapi.h>
 
 int _PDCLIB_rename( const char * old, const char * new )
 {
-    if (XRenameFile(old, new) == STATUS_SUCCESS)
+    if (MoveFileA(old, new) != 0)
     {
         return 0;
     }
     else
     {
-        // FIXME: Translate returned errors to proper errno
-        //_PDCLIB_errno = _PDCLIB_ERROR;
+        *_PDCLIB_errno_func() = werror_to_errno(GetLastError(), _PDCLIB_ERRNO_MAX + 1);
         return -1;
     }
 }
