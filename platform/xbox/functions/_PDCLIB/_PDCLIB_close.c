@@ -12,11 +12,11 @@
 #ifndef REGTEST
 
 #include "pdclib/_PDCLIB_glue.h"
-#include <hal/fileio.h>
+#include <handleapi.h>
 
-int _PDCLIB_close( int fd )
+int _PDCLIB_close( _PDCLIB_fd_t fd )
 {
-    return XCloseHandle( fd );
+    return CloseHandle ( fd );
 }
 
 #endif

@@ -13,6 +13,7 @@
 #ifndef REGTEST
 
 #include "pdclib/_PDCLIB_glue.h"
+#include <pdclib/werrno.h>
 
 #include <hal/fileio.h>
 
@@ -39,14 +40,14 @@ int _PDCLIB_flushbuffer( struct _PDCLIB_file_t * stream )
     */
     for ( retries = _PDCLIB_IO_RETRIES; retries > 0; --retries )
     {
-        unsigned int amount_written;
+        DWORD amount_written;
         int status;
-        status = XWriteFile(stream->handle, stream->buffer + written, stream->bufidx - written, &amount_written);
+
+        status = WriteFile(stream->handle, stream->buffer + written, stream->bufidx - written, &amount_written, NULL);
         if (!status)
         {
             /* Write error */
-            // FIXME: Translate returned errors to proper errno
-            //_PDCLIB_errno = _PDCLIB_ERROR;
+            *_PDCLIB_errno_func() = werror_to_errno(GetLastError(), _PDCLIB_ERRNO_MAX + 1);
             stream->status |= _PDCLIB_ERRORFLAG;
             /* Move unwritten remains to begin of buffer. */
             stream->bufidx -= written;
