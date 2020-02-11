@@ -1,6 +1,7 @@
 #include <xboxkrnl/xboxkrnl.h>
 #include <pdclib/_PDCLIB_xbox_tls.h>
 
+#pragma comment(linker, "/include:__tls_index")
 ULONG _tls_index = 0;
 
 __attribute__((section(".tls"))) char _tls_start = 0;
