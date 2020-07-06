@@ -1,11 +1,12 @@
 #include <threads.h>
 #include <assert.h>
-#include <pdclib/_PDCLIB_xbox_tss.h>
+#include <windows.h>
 
 int tss_set (tss_t key, void *val)
 {
-    assert(key < TSS_SLOTS_NUM);
+    if (TlsSetValue(key, val)) {
+        return thrd_success;
+    }
 
-    tss_slots[key] = val;
-    return thrd_success;
+    return thrd_error;
 }

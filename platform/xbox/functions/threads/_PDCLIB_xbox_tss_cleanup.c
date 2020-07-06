@@ -1,30 +1,26 @@
-#include <threads.h>
-#include <stdbool.h>
 #include <pdclib/_PDCLIB_xbox_tss.h>
+#include <stdbool.h>
+#include <threads.h>
+#include <windows.h>
 
-void _PDCLIB_xbox_tss_cleanup()
+tss_dtor_t tss_dtors[FLS_MAXIMUM_AVAILABLE];
+
+void _PDCLIB_xbox_tss_cleanup (void)
 {
-    for (int dtor_i=0; dtor_i<TSS_DTOR_ITERATIONS; dtor_i++)
-    {
-        bool not_done = false;
+    for (int dtor_i = 0; dtor_i < TSS_DTOR_ITERATIONS; dtor_i++) {
+        for (int i = 0; i < FLS_MAXIMUM_AVAILABLE; i++) {
+            if (!tss_dtors[i]) continue;
+            if (!TlsGetValue(i)) continue;
 
-        for (int slot_i=0; slot_i<TSS_SLOTS_NUM; slot_i++)
-        {
-            if (tss_dtors[slot_i] == NULL) continue;
-            if (tss_slots[slot_i] == NULL) continue;
-
-            void *val;
-            val = tss_slots[slot_i];
-            tss_slots[slot_i] = NULL;
-            tss_dtors[slot_i](val);
+            void *val = TlsGetValue(i);
+            TlsSetValue(i, NULL);
+            tss_dtors[i](val);
         }
 
         bool done = true;
 
-        for (int slot_i=0; slot_i<TSS_SLOTS_NUM; slot_i++)
-        {
-            if (tss_slots[slot_i] != NULL && tss_dtors[slot_i] != NULL)
-            {
+        for (int i = 0; i < FLS_MAXIMUM_AVAILABLE; i++) {
+            if (tss_dtors[i] && TlsGetValue(i)) {
                 done = false;
                 break;
             }

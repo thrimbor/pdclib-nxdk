@@ -535,11 +535,7 @@ typedef unsigned int wint_t;
 #endif
 
 /* threads ------------------------------------------------------------------ */
-typedef struct __PDCLIB_thrd_t
-{
-    void *handle;
-    void *id;
-} _PDCLIB_thrd_t;
+typedef void *_PDCLIB_thrd_t;
 typedef struct __PDCLIB_cnd_t
 {
     void *eventHandles[2]; // [0] single-receiver signal, [1] broadcast signal

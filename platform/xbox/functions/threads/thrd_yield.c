@@ -1,7 +1,7 @@
 #include <threads.h>
-#include <xboxkrnl/xboxkrnl.h>
+#include <windows.h>
 
 void thrd_yield (void)
 {
-    NtYieldExecution();
+    SwitchToThread();
 }

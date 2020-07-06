@@ -1,33 +1,21 @@
 #include <threads.h>
-#include <xboxkrnl/xboxkrnl.h>
+#include <windows.h>
 
 int thrd_join (thrd_t thr, int *res)
 {
-    if (thr.handle == NULL)
-    {
+    if (WaitForSingleObject(thr, INFINITE) == WAIT_FAILED) {
         return thrd_error;
     }
 
-    NTSTATUS status = NtWaitForSingleObject(thr.handle, FALSE, NULL);
-    if (status != STATUS_WAIT_0)
-    {
-        return thrd_error;
-    }
-
-    if (res)
-    {
-        PETHREAD threadObject;
-        if (!NT_SUCCESS(ObReferenceObjectByHandle(thr.handle, NULL, (PVOID *)&threadObject)))
-        {
+    if (res) {
+        DWORD thread_result;
+        if (GetExitCodeThread(thr, &thread_result) != 0) {
+            *res = (int)thread_result;
+        } else {
             return thrd_error;
         }
-
-        *res = threadObject->ExitStatus;
-
-        ObfDereferenceObject(threadObject);
     }
 
-    NtClose(thr.handle);
-
+    CloseHandle(thr);
     return thrd_success;
 }

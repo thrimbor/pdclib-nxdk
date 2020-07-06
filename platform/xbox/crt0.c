@@ -29,12 +29,6 @@ void _PDCLIB_xbox_libc_deinit ()
 
 static int main_wrapper ()
 {
-    _PDCLIB_xbox_tss_init();
-
-    _PDCLIB_xbox_libc_init();
-
-    _PDCLIB_xbox_run_crt_initializers();
-
     int retval;
     char *_argv = 0;
     retval = main(0, &_argv);
@@ -55,6 +49,9 @@ void XboxCRTEntry ()
     tlssize = (tlssize + 15) & ~15;
     tlssize += 4;
     *((DWORD *)_tls_used.AddressOfIndex) = (int)tlssize / -4;
+
+    _PDCLIB_xbox_libc_init();
+    _PDCLIB_xbox_run_crt_initializers();
 
     thrd_t main_thread;
     thrd_create(&main_thread, main_wrapper, NULL);
