@@ -1,9 +1,8 @@
 #include <threads.h>
 #include <stdbool.h>
-#include <xboxkrnl/xboxkrnl.h>
+#include <windows.h>
 
 int thrd_equal (thrd_t thr0, thrd_t thr1)
 {
-    // Compare thread-IDs
-    return (thr0.id == thr1.id);
+    return (GetThreadId(thr0) == GetThreadId(thr1));
 }

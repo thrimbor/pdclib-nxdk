@@ -5,5 +5,6 @@
 _Noreturn void thrd_exit (int res)
 {
     _PDCLIB_xbox_tss_cleanup();
-    PsTerminateSystemThread(res);
+    ExitThread((DWORD)res);
+    while (1); // Suppresses noreturn warning
 }
