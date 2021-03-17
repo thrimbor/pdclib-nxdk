@@ -46,7 +46,7 @@ static int main_wrapper ()
     return retval;
 }
 
-void XboxCRTEntry ()
+void WinMainCRTStartup ()
 {
     DWORD tlssize;
     // Sum up the required amount of memory, round it up to a multiple of
