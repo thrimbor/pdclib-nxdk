@@ -1,9 +1,10 @@
 #include <xboxkrnl/xboxkrnl.h>
+#include <winnt.h>
 #include <stdlib.h>
 #include <threads.h>
-#include <pdclib/_PDCLIB_xbox_tls.h>
 #include <pdclib/_PDCLIB_xbox_tss.h>
 
+extern const IMAGE_TLS_DIRECTORY_32 _tls_used;
 extern void _PDCLIB_xbox_run_crt_initializers();
 extern int main (int argc, char **argv);
 extern mtx_t _PDCLIB_filelist_mtx;
