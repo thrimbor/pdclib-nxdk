@@ -4,6 +4,11 @@
 #include <threads.h>
 #include <pdclib/_PDCLIB_xbox_tss.h>
 
+// When using LTO, those symbols may be referenced by code generated at link time.
+// By placing this here, we make sure the linker always includes their bitcode files.
+#pragma comment(linker, "/include:__fltused")
+#pragma comment(linker, "/include:__xlibc_check_stack")
+
 extern const IMAGE_TLS_DIRECTORY_32 _tls_used;
 extern void _PDCLIB_xbox_run_crt_initializers();
 extern int main (int argc, char **argv);
