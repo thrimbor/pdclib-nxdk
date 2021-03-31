@@ -10,6 +10,7 @@
 #pragma comment(linker, "/include:__xlibc_check_stack")
 
 extern const IMAGE_TLS_DIRECTORY_32 _tls_used;
+extern void __cdecl __security_init_cookie (void);
 extern void _PDCLIB_xbox_run_crt_initializers();
 extern int main (int argc, char **argv);
 extern mtx_t _PDCLIB_filelist_mtx;
@@ -46,8 +47,11 @@ static int main_wrapper ()
     return retval;
 }
 
-void WinMainCRTStartup ()
+void __attribute__((no_stack_protector)) WinMainCRTStartup ()
 {
+    // The security cookie needs to be initialized as early as possible, and from a non-protected function
+    __security_init_cookie();
+
     DWORD tlssize;
     // Sum up the required amount of memory, round it up to a multiple of
     // 16 bytes and add 4 bytes for the self-reference
