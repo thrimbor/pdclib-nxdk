@@ -10,7 +10,7 @@ __attribute__((section(".CRT$XIZ"))) _PIFV __xi_z[] = {0};
 __attribute__((section(".CRT$XCA"))) _PVFV __xc_a[] = {0};
 __attribute__((section(".CRT$XCZ"))) _PVFV __xc_z[] = {0};
 
-void _PDCLIB_xbox_run_crt_initializers()
+void _PDCLIB_xbox_run_crt_initializers (void)
 {
     int ret = 0;
 

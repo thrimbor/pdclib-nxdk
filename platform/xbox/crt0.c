@@ -11,14 +11,14 @@
 
 extern const IMAGE_TLS_DIRECTORY_32 _tls_used;
 extern void __cdecl __security_init_cookie (void);
-extern void _PDCLIB_xbox_run_crt_initializers();
+extern void _PDCLIB_xbox_run_crt_initializers (void);
 extern int main (int argc, char **argv);
 extern mtx_t _PDCLIB_filelist_mtx;
 extern struct _PDCLIB_file_t * stdin;
 extern struct _PDCLIB_file_t * stdout;
 extern struct _PDCLIB_file_t * stderr;
 
-void _PDCLIB_xbox_libc_init ()
+void _PDCLIB_xbox_libc_init (void)
 {
     mtx_init(&_PDCLIB_filelist_mtx, mtx_plain);
     mtx_init(&stdin->mtx, mtx_recursive);
@@ -26,7 +26,7 @@ void _PDCLIB_xbox_libc_init ()
     mtx_init(&stderr->mtx, mtx_recursive);
 }
 
-void _PDCLIB_xbox_libc_deinit ()
+void _PDCLIB_xbox_libc_deinit (void)
 {
     mtx_destroy(&_PDCLIB_filelist_mtx);
     mtx_destroy(&stdin->mtx);
@@ -34,7 +34,7 @@ void _PDCLIB_xbox_libc_deinit ()
     mtx_destroy(&stderr->mtx);
 }
 
-static int main_wrapper ()
+static int main_wrapper (__attribute__((unused)) void *unused_param)
 {
     int retval;
     char *_argv = 0;
@@ -47,7 +47,7 @@ static int main_wrapper ()
     return retval;
 }
 
-void __attribute__((no_stack_protector)) WinMainCRTStartup ()
+void __attribute__((no_stack_protector)) WinMainCRTStartup (void)
 {
     // The security cookie needs to be initialized as early as possible, and from a non-protected function
     __security_init_cookie();
