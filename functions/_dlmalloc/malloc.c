@@ -596,6 +596,7 @@ MAX_RELEASE_CHECK_RATE   default: 4095 unless not HAVE_MMAP
 #define HAVE_MORECORE 0
 #define HAVE_MMAP 1
 #define USE_SPIN_LOCKS 1
+#define LACKS_UNISTD_H
 #define LACKS_FCNTL_H
 #define LACKS_SYS_TYPES_H
 #define LACKS_SYS_MMAN_H
@@ -1568,7 +1569,7 @@ DLMALLOC_EXPORT int mspace_mallopt(int, int);
 #ifndef LACKS_UNISTD_H
 #include <unistd.h>     /* for sbrk, sysconf */
 #else /* LACKS_UNISTD_H */
-#if !defined(__FreeBSD__) && !defined(__OpenBSD__) && !defined(__NetBSD__)
+#if !defined(__FreeBSD__) && !defined(__OpenBSD__) && !defined(__NetBSD__) && !defined(NXDK)
 extern void*     sbrk(ptrdiff_t);
 #endif /* FreeBSD etc */
 #endif /* LACKS_UNISTD_H */
