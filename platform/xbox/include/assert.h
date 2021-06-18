@@ -22,14 +22,11 @@ void _xbox_assert(char const * const expression, char const * const file_name, c
     #define assert(ignore) ((void)0)
 #else
     #define assert(expression) \
-        do { \
-            if(!(expression)) { \
-                _xbox_assert(_PDCLIB_symbol2string(expression), \
-                             __FILE__, \
-                             __func__, \
-                             __LINE__); \
-            } \
-        } while(0)
+        ((void) ((expression) ? 0 :  \
+            (_xbox_assert(_PDCLIB_symbol2string(expression), \
+                          __FILE__, \
+                          __func__, \
+                          __LINE__), 0)))
 #endif
 
 #define static_assert _Static_assert
